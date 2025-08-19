@@ -1,0 +1,261 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* CSS Variables for the pixel violet theme */
+:root {
+  --bg: #0E0A1F;
+  --surface: #15102A;
+  --violet: #7C3AED;
+  --violet-2: #A78BFA;
+  --cyan: #22D3EE;
+  --lime: #A3E635;
+  --rose: #FB7185;
+  --text: #EDE9FE;
+  --muted: #A1A1AA;
+  
+  /* Scanlines overlay */
+  --scanlines: repeating-linear-gradient(
+    to bottom, 
+    rgba(255,255,255,0.03) 0 1px, 
+    transparent 1px 3px
+  );
+  
+  /* Dither pattern */
+  --dither: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.04) 1px, transparent 1px);
+}
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Manrope', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Pixel surface styling */
+.pixel-surface {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  border-radius: 2px;
+}
+
+/* CRT scanline effect */
+.crt {
+  background-image: var(--scanlines);
+  position: relative;
+}
+
+.crt::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--dither);
+  background-size: 4px 4px;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* Pixel grid background */
+.pixel-grid {
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* Glow effects */
+.glow {
+  box-shadow: 0 0 12px var(--violet-2);
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 12px var(--violet-2), 0 0 24px var(--violet-2);
+  transition: box-shadow 0.24s ease;
+}
+
+/* Pixel button styles */
+.btn-pixel {
+  background: var(--violet);
+  color: var(--text);
+  border: none;
+  padding: 8px 16px;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.12s ease;
+  image-rendering: pixelated;
+}
+
+.btn-pixel:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 0 12px var(--violet-2);
+}
+
+.btn-pixel:active {
+  transform: scale(0.98);
+}
+
+/* Focus rings for accessibility */
+.focus-ring:focus-visible {
+  outline: 1px dotted var(--violet-2);
+  outline-offset: 2px;
+  box-shadow: 0 0 6px var(--violet-2);
+}
+
+/* Pixel avatar */
+.pixel-avatar {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  filter: contrast(1.1) saturate(1.2);
+}
+
+/* Magnetic cursor effect */
+.magnetic {
+  transition: transform 0.12s ease;
+}
+
+/* Scanline animation */
+@keyframes scanline {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.scanline-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: scanline 2s linear infinite;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+/* Chromatic aberration effect */
+.chromatic:active {
+  filter: 
+    drop-shadow(-1px 0 0 var(--rose)) 
+    drop-shadow(1px 0 0 var(--cyan));
+  transition: filter 0.05s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--violet);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--violet-2);
+}
+
+/* Selection styles */
+::selection {
+  background: var(--violet);
+  color: var(--text);
+}
+
+/* Floating particles animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 1;
+  }
+  66% {
+    transform: translateY(5px) translateX(-10px);
+    opacity: 0.7;
+  }
+}
+
+/* Konami code secret theme */
+body.konami-activated {
+  --violet: #FF0080;
+  --violet-2: #FF40A0;
+  --cyan: #00FFFF;
+  --lime: #FFFF00;
+}
+
+body.konami-activated .pixel-surface {
+  box-shadow: 
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 10px var(--violet),
+    0 0 20px var(--violet);
+}
+
+/* Reduced motion styles */
+@media (prefers-reduced-motion: reduce) {
+  .crt::before,
+  .scanline-sweep::after {
+    display: none;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px);
+      opacity: 0.3;
+    }
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --bg: #000000;
+    --surface: #1a1a1a;
+    --text: #ffffff;
+    --muted: #cccccc;
+  }
+}
