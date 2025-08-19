@@ -1,4 +1,4 @@
-# **Mithun – Pixel Violet Portfolio (Design & Animation Spec)**
+# **Mithrajith – Pixel Violet Portfolio (Design & Animation Spec)**
 
 > A dark–violet, pixel‑styled, buttery‑smooth React portfolio with maximal yet tasteful motion. This markdown is the single source of truth for how it should *look, feel, and move*.
 
@@ -80,7 +80,7 @@
 
 * **Hero:**
 
-  * Big pixel title: `Mithun.dev` with scanline shimmer traveling left→right.
+  * Big pixel title: `Mithrajith.dev` with scanline shimmer traveling left→right.
   * Sub‑headline types on (character by character) with variable speed + occasional glitch.
   * **3D Pixel Planet (optional):** Three.js voxel planet spinning at 0.5rpm; hover scrubs rotation.
 * **CTA Chips:** "About", "Projects", "Contact" — float in, bob subtly, leave a neon trail.

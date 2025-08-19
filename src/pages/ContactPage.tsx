@@ -8,31 +8,31 @@ import { pageVariants, pixelVariants, staggerContainer } from '@/lib/animations'
 const socialLinks = [
   {
     name: 'Email',
-    url: 'mailto:hello@mithun.dev',
+    url: 'mailto:hello@Mithrajith.dev',
     icon: Mail,
     color: 'violet',
-    handle: 'hello@mithun.dev',
+    handle: 'hello@Mithrajith.dev',
   },
   {
     name: 'GitHub',
-    url: 'https://github.com/mithun',
+    url: 'https://github.com/Mithrajith',
     icon: Github,
     color: 'text',
-    handle: '@mithun',
+    handle: '@Mithrajith',
   },
   {
     name: 'LinkedIn',
-    url: 'https://linkedin.com/in/mithun',
+    url: 'https://linkedin.com/in/Mithrajith',
     icon: Linkedin,
     color: 'cyan',
-    handle: '/in/mithun',
+    handle: '/in/Mithrajith',
   },
   {
     name: 'Twitter',
-    url: 'https://twitter.com/mithun',
+    url: 'https://twitter.com/Mithrajith',
     icon: Twitter,
     color: 'lime',
-    handle: '@mithun',
+    handle: '@Mithrajith',
   },
 ];
 

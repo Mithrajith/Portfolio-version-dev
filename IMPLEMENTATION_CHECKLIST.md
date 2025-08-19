@@ -35,7 +35,7 @@
 ## ✅ Pages Implementation
 
 ### Home Page
-- [x] Big pixel title "Mithun.dev" with scanline shimmer
+- [x] Big pixel title "Mithrajith.dev" with scanline shimmer
 - [x] Subtitle types character by character
 - [x] CTA chips that float in and bob
 - [x] Parallax starfield background

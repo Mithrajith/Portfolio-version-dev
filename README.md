@@ -1,4 +1,4 @@
-# Mithun's Pixel Violet Portfolio
+# Mithrajith's Pixel Violet Portfolio
 
 > A dark–violet, pixel‑styled, buttery‑smooth React portfolio with maximal yet tasteful motion.
 
@@ -55,7 +55,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/mithun/portfolio.git
+git clone https://github.com/Mithrajith/portfolio.git
 cd portfolio
 
 # Install dependencies
@@ -200,11 +200,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 > **"Crafted with pixels, polish, and a pinch of magic."** ✨
 
-Built with ❤️ by [Mithun](https://github.com/mithun)
+Built with ❤️ by [Mithrajith](https://github.com/Mithrajith)
 
 ## 📞 Contact
 
-- **Email**: hello@mithun.dev
-- **GitHub**: [@mithun](https://github.com/mithun)
-- **LinkedIn**: [/in/mithun](https://linkedin.com/in/mithun)
-- **Portfolio**: [mithun.dev](https://mithun.dev)
+- **Email**: hello@Mithrajith.dev
+- **GitHub**: [@Mithrajith](https://github.com/Mithrajith)
+- **LinkedIn**: [/in/Mithrajith](https://linkedin.com/in/Mithrajith)
+- **Portfolio**: [Mithrajith.dev](https://Mithrajith.dev)

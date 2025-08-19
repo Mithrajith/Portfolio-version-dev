@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Coffee, Zap } from 'lucide-react';
 import { PixelCard } from '@/components/ui/PixelCard';
+import { ProfileAvatar } from '@/components/ui/ProfileAvatar';
 import { JourneyTimeline } from '@/components/timeline/JourneyTimeline';
 import { pageVariants, pixelVariants, staggerContainer } from '@/lib/animations';
 
@@ -77,15 +78,11 @@ export const AboutPage: React.FC = () => {
             variants={staggerContainer}
           >
             <motion.div variants={pixelVariants}>
-              <PixelCard className="aspect-square flex items-center justify-center bg-violet/5">
-                <div className="w-32 h-32 bg-gradient-to-br from-violet to-violet-2 rounded-full flex items-center justify-center">
-                  <span className="font-pixel text-4xl text-text">M</span>
-                </div>
-              </PixelCard>
+              <ProfileAvatar className="max-w-sm mx-auto" />
             </motion.div>
 
             <motion.div className="space-y-4" variants={pixelVariants}>
-              <h2 className="font-display text-2xl text-text">Hi, I'm Mithun!</h2>
+              <h2 className="font-display text-2xl text-text">Hi, I'm Mithrajith!</h2>
               <div className="space-y-3 text-muted">
                 <p>
                   I'm a full-stack developer with a passion for creating beautiful, 

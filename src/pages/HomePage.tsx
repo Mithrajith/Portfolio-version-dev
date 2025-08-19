@@ -11,7 +11,7 @@ const subtitle = "Crafted with pixels, polish, and a pinch of magic.";
 
 export const HomePage: React.FC = () => {
   useEffect(() => {
-    document.title = "Mithun.dev - Pixel Violet Portfolio";
+    document.title = "Mithrajith.dev - Pixel Violet Portfolio";
   }, []);
 
   return (
@@ -60,7 +60,7 @@ export const HomePage: React.FC = () => {
               animate={{ filter: 'blur(0px)', opacity: 1 }}
               transition={{ duration: 1.4, delay: 0.5 }}
             >
-              Mithun.dev
+              Mithrajith.dev
             </motion.h1>
             
             {/* Scanline shimmer */}

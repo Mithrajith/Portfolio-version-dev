@@ -13,7 +13,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
     tech: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
     liveUrl: 'https://example-ecommerce.com',
-    githubUrl: 'https://github.com/mithun/ecommerce',
+    githubUrl: 'https://github.com/Mithrajith/ecommerce',
     featured: true,
   },
   {
@@ -23,7 +23,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop',
     tech: ['Next.js', 'TypeScript', 'Socket.io', 'MongoDB'],
     liveUrl: 'https://example-tasks.com',
-    githubUrl: 'https://github.com/mithun/tasks',
+    githubUrl: 'https://github.com/Mithrajith/tasks',
     featured: true,
   },
   {
@@ -33,7 +33,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=400&h=300&fit=crop',
     tech: ['Vue.js', 'Chart.js', 'OpenWeather API'],
     liveUrl: 'https://example-weather.com',
-    githubUrl: 'https://github.com/mithun/weather',
+    githubUrl: 'https://github.com/Mithrajith/weather',
     featured: false,
   },
   {
@@ -42,8 +42,8 @@ const projects = [
     description: 'This very portfolio website built with React, Framer Motion, and Tailwind CSS. Features pixel-perfect animations and responsive design.',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
     tech: ['React', 'Framer Motion', 'Tailwind CSS', 'TypeScript'],
-    liveUrl: 'https://mithun.dev',
-    githubUrl: 'https://github.com/mithun/portfolio',
+    liveUrl: 'https://Mithrajith.dev',
+    githubUrl: 'https://github.com/Mithrajith/portfolio',
     featured: true,
   },
   {
@@ -53,7 +53,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop',
     tech: ['Next.js', 'MDX', 'Prisma', 'PostgreSQL'],
     liveUrl: 'https://example-blog.com',
-    githubUrl: 'https://github.com/mithun/blog',
+    githubUrl: 'https://github.com/Mithrajith/blog',
     featured: false,
   },
   {
@@ -63,7 +63,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=400&h=300&fit=crop',
     tech: ['React', 'Socket.io', 'Node.js', 'Redis'],
     liveUrl: 'https://example-chat.com',
-    githubUrl: 'https://github.com/mithun/chat',
+    githubUrl: 'https://github.com/Mithrajith/chat',
     featured: false,
   },
 ];
