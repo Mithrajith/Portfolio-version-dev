@@ -2,18 +2,9 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Code2, Mail } from 'lucide-react';
-import { PixelCard } from '../components/ui/PixelCard';
-import { PixelButton } from '../components/ui/PixelButton';
-import { 
-  ScrollAnimate,
-  TypewriterAnimation,
-  ParticleField,
-  GlitchEffect,
-  StaggerWrapper,
-  HoverCard3D,
-  MagneticDiv
-} from '../components/animations/AnimationComponents';
-import { pageVariants, pixelVariants, staggerContainer } from '../lib/animations';
+import { PixelCard } from '@/components/ui/PixelCard';
+import { PixelButton } from '@/components/ui/PixelButton';
+import { pageVariants, pixelVariants, staggerContainer, typingVariants, letterVariants } from '@/lib/animations';
 
 const heroText = "Full Stack Developer";
 const subtitle = "Crafted with pixels, polish, and a pinch of magic.";
@@ -31,7 +22,28 @@ export const HomePage: React.FC = () => {
       animate="in"
       exit="out"
     >
-      <ParticleField count={30} className="z-0" />
+      {/* Background particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-violet-2/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0.3, 1, 0.3],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
 
       <div className="container mx-auto px-6 py-20 relative z-10">
         <motion.div
@@ -41,17 +53,15 @@ export const HomePage: React.FC = () => {
           animate="show"
         >
           {/* Logo/Title with scanline effect */}
-          <ScrollAnimate direction="scale" delay={0.2}>
-            <GlitchEffect trigger="constant" intensity="low">
-              <motion.h1 
-                className="font-pixel text-4xl md:text-6xl lg:text-7xl text-violet-2 relative z-10"
-                initial={{ filter: 'blur(8px)', opacity: 0 }}
-                animate={{ filter: 'blur(0px)', opacity: 1 }}
-                transition={{ duration: 1.4, delay: 0.5 }}
-              >
-                Mithun.dev
-              </motion.h1>
-            </GlitchEffect>
+          <motion.div className="relative" variants={pixelVariants}>
+            <motion.h1 
+              className="font-pixel text-4xl md:text-6xl lg:text-7xl text-violet-2 relative z-10"
+              initial={{ filter: 'blur(8px)', opacity: 0 }}
+              animate={{ filter: 'blur(0px)', opacity: 1 }}
+              transition={{ duration: 1.4, delay: 0.5 }}
+            >
+              Mithun.dev
+            </motion.h1>
             
             {/* Scanline shimmer */}
             <motion.div
@@ -64,17 +74,25 @@ export const HomePage: React.FC = () => {
                 ease: 'linear',
               }}
             />
-          </ScrollAnimate>
+          </motion.div>
 
           {/* Typing subtitle */}
-          <ScrollAnimate direction="up" delay={0.5}>
-            <TypewriterAnimation
-              text={heroText}
-              speed={100}
-              delay={2000}
-              className="font-display text-xl md:text-2xl text-text block"
-            />
-          </ScrollAnimate>
+          <motion.div
+            variants={typingVariants}
+            initial="hidden"
+            animate="visible"
+            className="font-display text-xl md:text-2xl text-text"
+          >
+            {heroText.split('').map((char, index) => (
+              <motion.span
+                key={index}
+                variants={letterVariants}
+                className="inline-block"
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </motion.span>
+            ))}
+          </motion.div>
 
           {/* Description */}
           <motion.p
@@ -137,61 +155,54 @@ export const HomePage: React.FC = () => {
         </motion.div>
 
         {/* Feature cards */}
-        <StaggerWrapper className="grid md:grid-cols-3 gap-6 mt-20">
-          <HoverCard3D>
-            <MagneticDiv strength={0.1}>
-              <PixelCard 
-                interactive
-                className="text-center p-6 group hover:bg-violet/5 transition-colors duration-300 h-full"
-              >
-                <ParticleField count={5} size={1} className="opacity-30" />
-                <div className="w-12 h-12 bg-violet/20 rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
-                  <Code2 className="text-violet-2" size={24} />
-                </div>
-                <h3 className="font-display text-lg text-violet-2 mb-2">Frontend</h3>
-                <p className="text-muted text-sm">
-                  React, TypeScript, Next.js with pixel-perfect animations
-                </p>
-              </PixelCard>
-            </MagneticDiv>
-          </HoverCard3D>
+        <motion.div
+          className="grid md:grid-cols-3 gap-6 mt-20"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="show"
+        >
+          <PixelCard 
+            variants={pixelVariants}
+            interactive
+            className="text-center p-6 group hover:bg-violet/5 transition-colors duration-300"
+          >
+            <div className="w-12 h-12 bg-violet/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Code2 className="text-violet-2" size={24} />
+            </div>
+            <h3 className="font-display text-lg text-violet-2 mb-2">Frontend</h3>
+            <p className="text-muted text-sm">
+              React, TypeScript, Next.js with pixel-perfect animations
+            </p>
+          </PixelCard>
 
-          <HoverCard3D>
-            <MagneticDiv strength={0.1}>
-              <PixelCard 
-                interactive
-                className="text-center p-6 group hover:bg-violet/5 transition-colors duration-300 h-full"
-              >
-                <ParticleField count={5} size={1} color="#22D3EE" className="opacity-30" />
-                <div className="w-12 h-12 bg-cyan/20 rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
-                  <Sparkles className="text-cyan" size={24} />
-                </div>
-                <h3 className="font-display text-lg text-cyan mb-2">Backend</h3>
-                <p className="text-muted text-sm">
-                  Node.js, Python, databases with robust architecture
-                </p>
-              </PixelCard>
-            </MagneticDiv>
-          </HoverCard3D>
+          <PixelCard 
+            variants={pixelVariants}
+            interactive
+            className="text-center p-6 group hover:bg-violet/5 transition-colors duration-300"
+          >
+            <div className="w-12 h-12 bg-cyan/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="text-cyan" size={24} />
+            </div>
+            <h3 className="font-display text-lg text-cyan mb-2">Backend</h3>
+            <p className="text-muted text-sm">
+              Node.js, Python, databases with robust architecture
+            </p>
+          </PixelCard>
 
-          <HoverCard3D>
-            <MagneticDiv strength={0.1}>
-              <PixelCard 
-                interactive
-                className="text-center p-6 group hover:bg-violet/5 transition-colors duration-300 h-full"
-              >
-                <ParticleField count={5} size={1} color="#A3E635" className="opacity-30" />
-                <div className="w-12 h-12 bg-lime/20 rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
-                  <Mail className="text-lime" size={24} />
-                </div>
-                <h3 className="font-display text-lg text-lime mb-2">Design</h3>
-                <p className="text-muted text-sm">
-                  UI/UX with retro aesthetics and modern usability
-                </p>
-              </PixelCard>
-            </MagneticDiv>
-          </HoverCard3D>
-        </StaggerWrapper>
+          <PixelCard 
+            variants={pixelVariants}
+            interactive
+            className="text-center p-6 group hover:bg-violet/5 transition-colors duration-300"
+          >
+            <div className="w-12 h-12 bg-lime/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Mail className="text-lime" size={24} />
+            </div>
+            <h3 className="font-display text-lg text-lime mb-2">Design</h3>
+            <p className="text-muted text-sm">
+              UI/UX with retro aesthetics and modern usability
+            </p>
+          </PixelCard>
+        </motion.div>
       </div>
     </motion.div>
   );

@@ -1,622 +1,608 @@
-import { Variants, Easing } from 'framer-motion';
+import { Variants, Transition } from 'framer-motion';
 
-// ===== EASING FUNCTIONS =====
+// Enhanced easing curves
 export const easings = {
-  // Standard easings
-  linear: [0, 0, 1, 1] as Easing,
-  easeIn: [0.4, 0, 1, 1] as Easing,
-  easeOut: [0, 0, 0.2, 1] as Easing,
-  easeInOut: [0.4, 0, 0.2, 1] as Easing,
+  // Custom cubic-bezier curves
+  smooth: [0.25, 0.46, 0.45, 0.94],
+  snappy: [0.68, -0.55, 0.265, 1.55],
+  gentle: [0.16, 1, 0.3, 1],
+  bounce: [0.175, 0.885, 0.32, 1.275],
+  elastic: [0.68, -0.6, 0.32, 1.6],
   
-  // Custom easings
-  bounce: [0.68, -0.55, 0.265, 1.55] as Easing,
-  elastic: [0.25, 0.46, 0.45, 0.94] as Easing,
-  backIn: [0.36, 0, 0.66, -0.56] as Easing,
-  backOut: [0.34, 1.56, 0.64, 1] as Easing,
-  sharp: [0.4, 0, 0.6, 1] as Easing,
-  
-  // Pixel-specific
-  pixelSharp: [0.25, 0.1, 0.25, 1] as Easing,
-  retroBounce: [0.68, -0.55, 0.265, 1.55] as Easing,
-  glitch: [0.23, 1, 0.32, 1] as Easing,
-};
+  // Spring configurations
+  spring: {
+    soft: { type: 'spring', damping: 20, stiffness: 100 },
+    medium: { type: 'spring', damping: 25, stiffness: 200 },
+    snappy: { type: 'spring', damping: 30, stiffness: 400 },
+    bouncy: { type: 'spring', damping: 10, stiffness: 150 },
+  }
+} as const;
 
-// ===== DURATION PRESETS =====
+// Duration tiers as specified in instruction.md
 export const durations = {
-  instant: 0.05,
-  micro: 0.12,
-  fast: 0.24,
-  normal: 0.42,
-  slow: 0.6,
-  slower: 0.8,
-  epic: 1.2,
-  cinematic: 2.0,
-};
+  micro: 0.12,      // 120ms - micro interactions
+  ui: 0.24,         // 240ms - UI transitions
+  scene: 0.6,       // 600ms - scene transitions
+  hero: 1.2,        // 1200ms - hero set-pieces
+  epic: 2.0,        // 2000ms - epic animations
+} as const;
 
-// ===== SPRING PRESETS =====
-export const springs = {
-  gentle: { type: "spring" as const, stiffness: 120, damping: 14, mass: 1 },
-  wobbly: { type: "spring" as const, stiffness: 180, damping: 12, mass: 1 },
-  stiff: { type: "spring" as const, stiffness: 400, damping: 30, mass: 1 },
-  slow: { type: "spring" as const, stiffness: 200, damping: 50, mass: 3 },
-  molasses: { type: "spring" as const, stiffness: 280, damping: 120, mass: 10 },
-  
-  // Pixel-themed springs
-  pixelBounce: { type: "spring" as const, stiffness: 300, damping: 10, mass: 0.8 },
-  retroElastic: { type: "spring" as const, stiffness: 400, damping: 17, mass: 1 },
-  gamepadFeel: { type: "spring" as const, stiffness: 500, damping: 30, mass: 1.2 },
-};
-
-// ===== ENTRANCE ANIMATIONS =====
-export const entranceVariants = {
-  // Fade variants
-  fadeIn: {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { duration: durations.normal } },
-  } as Variants,
-
-  fadeInUp: {
-    hidden: { opacity: 0, y: 60 },
-    show: { opacity: 1, y: 0, transition: { duration: durations.normal, ease: easings.easeOut } },
-  } as Variants,
-
-  fadeInDown: {
-    hidden: { opacity: 0, y: -60 },
-    show: { opacity: 1, y: 0, transition: { duration: durations.normal, ease: easings.easeOut } },
-  } as Variants,
-
-  fadeInLeft: {
-    hidden: { opacity: 0, x: -60 },
-    show: { opacity: 1, x: 0, transition: { duration: durations.normal, ease: easings.easeOut } },
-  } as Variants,
-
-  fadeInRight: {
-    hidden: { opacity: 0, x: 60 },
-    show: { opacity: 1, x: 0, transition: { duration: durations.normal, ease: easings.easeOut } },
-  } as Variants,
-
-  // Scale variants
-  scaleIn: {
-    hidden: { opacity: 0, scale: 0.5 },
-    show: { opacity: 1, scale: 1, transition: springs.gentle },
-  } as Variants,
-
-  scaleInBounce: {
-    hidden: { opacity: 0, scale: 0 },
-    show: { opacity: 1, scale: 1, transition: springs.wobbly },
-  } as Variants,
-
-  // Pixel dissolve
+// Advanced entrance animations
+export const entranceVariants: Record<string, Variants> = {
+  // Pixel dissolve with enhanced effects
   pixelDissolve: {
-    hidden: { 
-      opacity: 0, 
-      filter: 'blur(8px)', 
+    hidden: {
+      opacity: 0,
+      filter: 'blur(8px) brightness(0.5)',
       scale: 0.95,
-      rotateX: 15 
+      y: 20,
     },
-    show: { 
-      opacity: 1, 
-      filter: 'blur(0px)', 
+    visible: {
+      opacity: 1,
+      filter: 'blur(0px) brightness(1)',
       scale: 1,
-      rotateX: 0,
-      transition: { duration: durations.slow, ease: easings.pixelSharp }
+      y: 0,
+      transition: {
+        duration: durations.scene,
+        ease: easings.gentle,
+      },
     },
-  } as Variants,
+  },
 
   // Glitch entrance
   glitchIn: {
-    hidden: { 
-      opacity: 0, 
-      x: -10,
-      skewX: 10,
-      filter: 'hue-rotate(90deg) contrast(150%)'
-    },
-    show: { 
-      opacity: 1, 
-      x: 0,
-      skewX: 0,
-      filter: 'hue-rotate(0deg) contrast(100%)',
-      transition: { 
-        duration: durations.normal,
-        ease: easings.glitch,
-        filter: { delay: 0.1 }
-      }
-    },
-  } as Variants,
-
-  // Zoom variants
-  zoomIn: {
-    hidden: { opacity: 0, scale: 0.3, rotate: -10 },
-    show: { 
-      opacity: 1, 
-      scale: 1, 
-      rotate: 0,
-      transition: springs.pixelBounce
-    },
-  } as Variants,
-
-  // Flip variants
-  flipInX: {
-    hidden: { opacity: 0, rotateX: -90 },
-    show: { 
-      opacity: 1, 
-      rotateX: 0,
-      transition: { duration: durations.slow, ease: easings.backOut }
-    },
-  } as Variants,
-
-  flipInY: {
-    hidden: { opacity: 0, rotateY: -90 },
-    show: { 
-      opacity: 1, 
-      rotateY: 0,
-      transition: { duration: durations.slow, ease: easings.backOut }
-    },
-  } as Variants,
-
-  // Slide variants
-  slideInFromLeft: {
-    hidden: { x: '-100vw', opacity: 0 },
-    show: { 
-      x: 0, 
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100, damping: 20 }
-    },
-  } as Variants,
-
-  slideInFromRight: {
-    hidden: { x: '100vw', opacity: 0 },
-    show: { 
-      x: 0, 
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100, damping: 20 }
-    },
-  } as Variants,
-
-  // Typewriter effect
-  typewriter: {
-    hidden: { width: 0 },
-    show: { 
-      width: "auto",
-      transition: { duration: 2, ease: "easeInOut" }
-    },
-  } as Variants,
-
-  // Matrix digital rain effect
-  digitalRain: {
-    hidden: { 
-      opacity: 0,
-      y: -20,
-      filter: 'brightness(0)'
-    },
-    show: { 
-      opacity: [0, 1, 1, 0],
-      y: [0, 0, 0, 20],
-      filter: ['brightness(0)', 'brightness(2)', 'brightness(1)', 'brightness(0)'],
-      transition: { 
-        duration: 2,
-        times: [0, 0.1, 0.9, 1],
-        repeat: Infinity,
-        repeatDelay: Math.random() * 2
-      }
-    },
-  } as Variants,
-};
-
-// ===== HOVER ANIMATIONS =====
-export const hoverVariants = {
-  lift: {
-    rest: { y: 0, scale: 1, rotateX: 0 },
-    hover: { 
-      y: -8, 
-      scale: 1.02, 
-      rotateX: 5,
-      transition: { duration: durations.fast, ease: easings.easeOut }
-    },
-  } as Variants,
-
-  grow: {
-    rest: { scale: 1 },
-    hover: { scale: 1.05, transition: springs.gentle },
-  } as Variants,
-
-  wiggle: {
-    rest: { rotate: 0 },
-    hover: { 
-      rotate: [0, -5, 5, -5, 0],
-      transition: { duration: durations.normal }
-    },
-  } as Variants,
-
-  pulse: {
-    rest: { scale: 1 },
-    hover: { 
-      scale: [1, 1.1, 1],
-      transition: { duration: durations.normal, repeat: Infinity }
-    },
-  } as Variants,
-
-  glow: {
-    rest: { filter: 'brightness(1) drop-shadow(0 0 0px rgba(124, 58, 237, 0))' },
-    hover: { 
-      filter: 'brightness(1.2) drop-shadow(0 0 20px rgba(124, 58, 237, 0.8))',
-      transition: { duration: durations.fast }
-    },
-  } as Variants,
-
-  pixelGlitch: {
-    rest: { 
-      x: 0, 
-      filter: 'hue-rotate(0deg) contrast(100%)' 
-    },
-    hover: { 
-      x: [0, -2, 2, -1, 0],
-      filter: [
-        'hue-rotate(0deg) contrast(100%)', 
-        'hue-rotate(90deg) contrast(150%)',
-        'hue-rotate(180deg) contrast(120%)',
-        'hue-rotate(270deg) contrast(110%)',
-        'hue-rotate(0deg) contrast(100%)'
-      ],
-      transition: { duration: durations.fast }
-    },
-  } as Variants,
-
-  magneticPull: {
-    rest: { x: 0, y: 0 },
-    hover: (cursorDistance: number) => ({
-      x: cursorDistance * 0.1,
-      y: cursorDistance * 0.05,
-      transition: springs.gentle
-    }),
-  },
-};
-
-// ===== TAP/PRESS ANIMATIONS =====
-export const tapVariants = {
-  press: {
-    rest: { scale: 1 },
-    tap: { scale: 0.95, transition: { duration: durations.micro } },
-  } as Variants,
-
-  squish: {
-    rest: { scaleX: 1, scaleY: 1 },
-    tap: { scaleX: 1.1, scaleY: 0.9, transition: { duration: durations.micro } },
-  } as Variants,
-
-  pixelPress: {
-    rest: { 
-      scale: 1, 
-      filter: 'contrast(100%) brightness(1)' 
-    },
-    tap: { 
-      scale: 0.98,
-      filter: 'contrast(150%) brightness(1.2)',
-      transition: { duration: durations.micro }
-    },
-  } as Variants,
-
-  chromaticPress: {
-    rest: { 
-      filter: 'drop-shadow(0 0 0 transparent)' 
-    },
-    tap: { 
-      filter: 'drop-shadow(-2px 0 0 #FF0080) drop-shadow(2px 0 0 #00FFFF)',
-      transition: { duration: durations.micro }
-    },
-  } as Variants,
-};
-
-// ===== LOADING ANIMATIONS =====
-export const loadingVariants = {
-  spinner: {
-    animate: {
-      rotate: 360,
-      transition: { duration: 1, repeat: Infinity, ease: "linear" }
-    },
-  } as Variants,
-
-  pulse: {
-    animate: {
-      scale: [1, 1.2, 1],
-      opacity: [0.5, 1, 0.5],
-      transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
-    },
-  } as Variants,
-
-  scanline: {
-    animate: {
-      x: ["-100%", "100%"],
-      transition: { duration: 1.5, repeat: Infinity, ease: "linear" }
-    },
-  } as Variants,
-
-  pixelLoad: {
-    animate: {
-      opacity: [0.3, 1, 0.3],
-      scale: [0.8, 1, 0.8],
-      filter: ['blur(2px)', 'blur(0px)', 'blur(2px)'],
-      transition: { duration: 1, repeat: Infinity, ease: easings.pixelSharp }
-    },
-  } as Variants,
-
-  dots: {
-    animate: (i: number) => ({
-      y: [0, -20, 0],
-      transition: {
-        duration: 0.6,
-        repeat: Infinity,
-        delay: i * 0.1,
-        ease: "easeInOut"
-      }
-    }),
-  },
-};
-
-// ===== PAGE TRANSITION ANIMATIONS =====
-export const pageTransitions = {
-  fade: {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
-    transition: { duration: durations.normal },
-  },
-
-  slideHorizontal: {
-    initial: { x: '100vw', opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: '-100vw', opacity: 0 },
-    transition: springs.gentle,
-  },
-
-  slideVertical: {
-    initial: { y: '100vh', opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-    exit: { y: '-100vh', opacity: 0 },
-    transition: springs.gentle,
-  },
-
-  scale: {
-    initial: { scale: 0.8, opacity: 0 },
-    animate: { scale: 1, opacity: 1 },
-    exit: { scale: 1.2, opacity: 0 },
-    transition: springs.gentle,
-  },
-
-  pixelTransition: {
-    initial: { 
-      opacity: 0,
-      filter: 'blur(8px) pixelate(4px)',
-      scale: 0.9
-    },
-    animate: { 
-      opacity: 1,
-      filter: 'blur(0px) pixelate(0px)',
-      scale: 1
-    },
-    exit: { 
-      opacity: 0,
-      filter: 'blur(4px) pixelate(2px)',
-      scale: 1.1
-    },
-    transition: { duration: durations.slow, ease: easings.pixelSharp },
-  },
-
-  glitchTransition: {
-    initial: { 
+    hidden: {
       opacity: 0,
       x: -20,
-      skewX: 5,
-      filter: 'hue-rotate(180deg)'
+      filter: 'hue-rotate(0deg)',
     },
-    animate: { 
+    visible: {
+      opacity: 1,
+      x: 0,
+      filter: 'hue-rotate(0deg)',
+      transition: {
+        duration: durations.ui,
+        ease: easings.snappy,
+      },
+    },
+  },
+
+  // Matrix style reveal
+  matrixReveal: {
+    hidden: {
+      opacity: 0,
+      clipPath: 'inset(100% 0 0 0)',
+    },
+    visible: {
+      opacity: 1,
+      clipPath: 'inset(0% 0 0 0)',
+      transition: {
+        duration: durations.scene,
+        ease: easings.smooth,
+      },
+    },
+  },
+
+  // Cyber slide
+  cyberSlide: {
+    hidden: {
+      opacity: 0,
+      x: -100,
+      skewX: -10,
+    },
+    visible: {
       opacity: 1,
       x: 0,
       skewX: 0,
-      filter: 'hue-rotate(0deg)'
+      transition: {
+        duration: durations.ui,
+        ease: easings.bounce,
+      },
     },
-    exit: { 
+  },
+
+  // Neon glow up
+  neonGlow: {
+    hidden: {
       opacity: 0,
-      x: 20,
-      skewX: -5,
-      filter: 'hue-rotate(90deg)'
+      scale: 0.8,
+      filter: 'brightness(0) saturate(0)',
     },
-    transition: { duration: durations.normal, ease: easings.glitch },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      filter: 'brightness(1) saturate(1)',
+      transition: {
+        duration: durations.scene,
+        ease: easings.gentle,
+      },
+    },
+  },
+
+  // Hologram materialize
+  hologram: {
+    hidden: {
+      opacity: 0,
+      scaleY: 0.1,
+      filter: 'hue-rotate(180deg) brightness(2)',
+    },
+    visible: {
+      opacity: 1,
+      scaleY: 1,
+      filter: 'hue-rotate(0deg) brightness(1)',
+      transition: {
+        duration: durations.scene,
+        ease: easings.elastic,
+      },
+    },
   },
 };
 
-// ===== STAGGER ANIMATIONS =====
-export const staggerVariants = {
-  container: {
+// Advanced hover animations
+export const hoverVariants: Record<string, Variants> = {
+  // Enhanced lift with multiple effects
+  superLift: {
+    rest: {
+      y: 0,
+      scale: 1,
+      rotateY: 0,
+      filter: 'brightness(1) saturate(1)',
+      boxShadow: '0 0 0 rgba(124, 58, 237, 0)',
+    },
+    hover: {
+      y: -8,
+      scale: 1.02,
+      rotateY: 5,
+      filter: 'brightness(1.1) saturate(1.2)',
+      boxShadow: '0 10px 30px rgba(124, 58, 237, 0.3)',
+      transition: {
+        duration: durations.micro,
+        ease: easings.snappy,
+      },
+    },
+    tap: {
+      scale: 0.95,
+      y: -2,
+      transition: {
+        duration: 0.05,
+        ease: 'easeOut',
+      },
+    },
+  },
+
+  // Magnetic attraction
+  magnetic: {
+    rest: {
+      x: 0,
+      y: 0,
+      scale: 1,
+    },
+    hover: {
+      scale: 1.05,
+      transition: easings.spring.soft,
+    },
+  },
+
+  // Glitch effect
+  glitch: {
+    rest: {
+      filter: 'hue-rotate(0deg)',
+      textShadow: 'none',
+    },
+    hover: {
+      filter: ['hue-rotate(0deg)', 'hue-rotate(90deg)', 'hue-rotate(0deg)'],
+      textShadow: [
+        'none',
+        '2px 0 #ff0080, -2px 0 #00ffff',
+        'none',
+      ],
+      transition: {
+        duration: 0.3,
+        times: [0, 0.5, 1],
+        ease: 'easeInOut',
+      },
+    },
+  },
+
+  // Neon pulse
+  neonPulse: {
+    rest: {
+      boxShadow: '0 0 5px rgba(124, 58, 237, 0.5)',
+      filter: 'brightness(1)',
+    },
+    hover: {
+      boxShadow: [
+        '0 0 5px rgba(124, 58, 237, 0.5)',
+        '0 0 25px rgba(124, 58, 237, 0.8)',
+        '0 0 5px rgba(124, 58, 237, 0.5)',
+      ],
+      filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)'],
+      transition: {
+        duration: 1,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  },
+
+  // 3D rotate
+  rotate3D: {
+    rest: {
+      rotateX: 0,
+      rotateY: 0,
+      perspective: 1000,
+    },
+    hover: {
+      rotateY: 15,
+      rotateX: 5,
+      transition: {
+        duration: durations.micro,
+        ease: easings.gentle,
+      },
+    },
+  },
+};
+
+// Complex stagger animations
+export const staggerVariants: Record<string, Variants> = {
+  // Wave stagger
+  wave: {
     hidden: { opacity: 0 },
-    show: {
+    visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
         delayChildren: 0.2,
-        when: "beforeChildren",
+        when: 'beforeChildren',
+      },
+    },
+  },
+
+  // Cascade from center
+  cascade: {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: 1,
+      },
+    },
+  },
+
+  // Spiral reveal
+  spiral: {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.3,
+      },
+    },
+  },
+};
+
+// Advanced page transition effects
+export const pageTransitions: Record<string, Variants> = {
+  // Cyber wipe
+  cyberWipe: {
+    initial: {
+      clipPath: 'polygon(0 0, 0 0, 0 100%, 0% 100%)',
+      filter: 'brightness(0.5)',
+    },
+    animate: {
+      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+      filter: 'brightness(1)',
+      transition: {
+        duration: durations.scene,
+        ease: easings.smooth,
       },
     },
     exit: {
+      clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
+      filter: 'brightness(0.5)',
       transition: {
-        staggerChildren: 0.05,
-        staggerDirection: -1,
-        when: "afterChildren",
-      },
-    },
-  } as Variants,
-
-  item: {
-    hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: durations.normal, ease: easings.easeOut }
-    },
-    exit: { 
-      opacity: 0, 
-      y: -20,
-      transition: { duration: durations.fast }
-    },
-  } as Variants,
-
-  fastStagger: {
-    container: {
-      hidden: { opacity: 0 },
-      show: {
-        opacity: 1,
-        transition: { staggerChildren: 0.05, delayChildren: 0.1 },
-      },
-    },
-    item: {
-      hidden: { opacity: 0, scale: 0.8 },
-      show: { opacity: 1, scale: 1, transition: springs.gentle },
-    },
-  },
-
-  pixelStagger: {
-    container: {
-      hidden: { opacity: 0 },
-      show: {
-        opacity: 1,
-        transition: { staggerChildren: 0.08, delayChildren: 0.3 },
-      },
-    },
-    item: {
-      hidden: { 
-        opacity: 0, 
-        filter: 'blur(4px)',
-        scale: 0.9
-      },
-      show: { 
-        opacity: 1, 
-        filter: 'blur(0px)',
-        scale: 1,
-        transition: { duration: durations.normal, ease: easings.pixelSharp }
-      },
-    },
-  },
-};
-
-// ===== TEXT ANIMATIONS =====
-export const textVariants = {
-  typewriter: {
-    hidden: { width: 0, opacity: 0 },
-    show: {
-      width: "100%",
-      opacity: 1,
-      transition: { 
-        width: { duration: 2, ease: "easeInOut" },
-        opacity: { duration: 0.1 }
-      }
-    },
-  } as Variants,
-
-  letterByLetter: {
-    container: {
-      hidden: { opacity: 0 },
-      show: {
-        opacity: 1,
-        transition: { staggerChildren: 0.03, delayChildren: 0.2 },
-      },
-    },
-    letter: {
-      hidden: { opacity: 0, y: 10, rotateX: -90 },
-      show: { 
-        opacity: 1, 
-        y: 0, 
-        rotateX: 0,
-        transition: { duration: durations.fast, ease: easings.backOut }
+        duration: durations.ui,
+        ease: easings.smooth,
       },
     },
   },
 
-  glitchText: {
-    rest: { 
+  // Matrix slide
+  matrixSlide: {
+    initial: {
+      x: '100%',
+      filter: 'hue-rotate(180deg)',
+    },
+    animate: {
       x: 0,
       filter: 'hue-rotate(0deg)',
-      textShadow: '0 0 0 transparent'
+      transition: {
+        duration: durations.scene,
+        ease: easings.bounce,
+      },
+    },
+    exit: {
+      x: '-100%',
+      filter: 'hue-rotate(-180deg)',
+      transition: {
+        duration: durations.ui,
+        ease: easings.smooth,
+      },
+    },
+  },
+
+  // Pixel dissolve transition
+  pixelDissolveTransition: {
+    initial: {
+      opacity: 0,
+      filter: 'blur(10px) pixelate(10px)',
+      scale: 0.9,
     },
     animate: {
-      x: [0, -1, 1, 0],
-      filter: ['hue-rotate(0deg)', 'hue-rotate(90deg)', 'hue-rotate(180deg)', 'hue-rotate(0deg)'],
+      opacity: 1,
+      filter: 'blur(0px) pixelate(0px)',
+      scale: 1,
+      transition: {
+        duration: durations.scene,
+        ease: easings.gentle,
+      },
+    },
+    exit: {
+      opacity: 0,
+      filter: 'blur(5px) pixelate(5px)',
+      scale: 1.1,
+      transition: {
+        duration: durations.ui,
+        ease: easings.gentle,
+      },
+    },
+  },
+};
+
+// Text animation variants
+export const textVariants: Record<string, Variants> = {
+  // Typewriter with cursor
+  typewriter: {
+    hidden: { width: 0 },
+    visible: {
+      width: 'auto',
+      transition: {
+        duration: 2,
+        ease: 'linear',
+      },
+    },
+  },
+
+  // Glitch text
+  glitchText: {
+    rest: {
+      filter: 'hue-rotate(0deg)',
+      textShadow: '0 0 0 transparent',
+    },
+    animate: {
+      filter: ['hue-rotate(0deg)', 'hue-rotate(90deg)', 'hue-rotate(0deg)'],
       textShadow: [
         '0 0 0 transparent',
-        '-2px 0 0 #FF0080, 2px 0 0 #00FFFF',
-        '0 0 0 transparent'
+        '2px 0 #ff0080, -2px 0 #00ffff, 0 2px #ffff00',
+        '0 0 0 transparent',
       ],
-      transition: { duration: 0.3, repeat: Infinity, repeatDelay: 3 }
+      transition: {
+        duration: 0.5,
+        times: [0, 0.5, 1],
+        repeat: 2,
+      },
     },
-  } as Variants,
+  },
 
+  // Neon flicker
   neonFlicker: {
+    rest: {
+      textShadow: '0 0 10px currentColor',
+      opacity: 1,
+    },
     animate: {
+      opacity: [1, 0.5, 1, 0.8, 1],
       textShadow: [
-        '0 0 5px #7C3AED, 0 0 10px #7C3AED, 0 0 15px #7C3AED',
-        '0 0 2px #7C3AED, 0 0 5px #7C3AED, 0 0 8px #7C3AED',
-        '0 0 5px #7C3AED, 0 0 10px #7C3AED, 0 0 15px #7C3AED',
+        '0 0 10px currentColor',
+        '0 0 5px currentColor',
+        '0 0 15px currentColor',
+        '0 0 8px currentColor',
+        '0 0 12px currentColor',
       ],
-      transition: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+      transition: {
+        duration: 2,
+        ease: 'easeInOut',
+        repeat: Infinity,
+      },
     },
-  } as Variants,
-};
+  },
 
-// ===== SCROLL ANIMATIONS =====
-export const scrollVariants = {
-  parallax: (offset: number) => ({
-    y: offset * -0.5,
-    transition: { type: "spring", stiffness: 300, damping: 30 }
-  }),
-
-  reveal: {
-    hidden: { opacity: 0, y: 100 },
-    show: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: durations.slow, ease: easings.easeOut }
+  // Rainbow shift
+  rainbow: {
+    animate: {
+      background: [
+        'linear-gradient(45deg, #ff0000, #ff8800)',
+        'linear-gradient(45deg, #ff8800, #ffff00)',
+        'linear-gradient(45deg, #ffff00, #88ff00)',
+        'linear-gradient(45deg, #88ff00, #00ffff)',
+        'linear-gradient(45deg, #00ffff, #0088ff)',
+        'linear-gradient(45deg, #0088ff, #8800ff)',
+        'linear-gradient(45deg, #8800ff, #ff0000)',
+      ],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: 'linear',
+      },
     },
-  } as Variants,
-
-  scaleOnScroll: (progress: number) => ({
-    scale: 0.8 + (progress * 0.2),
-    opacity: Math.max(0.3, progress),
-    transition: springs.gentle
-  }),
+  },
 };
 
-// ===== MOUSE FOLLOW ANIMATIONS =====
-export const mouseFollowVariants = {
-  cursor: {
-    default: { scale: 1, opacity: 0.7 },
-    hover: { scale: 1.5, opacity: 1 },
-    click: { scale: 0.8, opacity: 1 },
-  } as Variants,
+// Particle and background effects
+export const particleVariants: Record<string, Variants> = {
+  // Floating particles
+  floating: {
+    animate: {
+      y: [-20, 20, -20],
+      x: [-10, 10, -10],
+      rotate: [0, 180, 360],
+      opacity: [0.3, 1, 0.3],
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  },
 
-  trail: (delay: number) => ({
-    x: 0, // Will be set by mouse position
-    y: 0, // Will be set by mouse position
-    scale: 1 - (delay * 0.1),
-    opacity: 1 - (delay * 0.2),
-    transition: { 
-      type: "spring", 
-      stiffness: 500 - (delay * 50), 
-      damping: 20 + (delay * 5) 
-    }
-  }),
+  // Orbiting particles
+  orbiting: {
+    animate: {
+      rotate: 360,
+      transition: {
+        duration: 10,
+        repeat: Infinity,
+        ease: 'linear',
+      },
+    },
+  },
+
+  // Pulsing energy
+  energy: {
+    animate: {
+      scale: [1, 1.5, 1],
+      opacity: [0.5, 1, 0.5],
+      filter: [
+        'hue-rotate(0deg) brightness(1)',
+        'hue-rotate(180deg) brightness(1.5)',
+        'hue-rotate(360deg) brightness(1)',
+      ],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  },
 };
 
-// ===== UTILITY FUNCTIONS =====
-export const createStaggerDelay = (index: number, baseDelay: number = 0.1) => ({
-  transition: { delay: index * baseDelay }
+// Loading and success animations
+export const loadingVariants: Record<string, Variants> = {
+  // Pixel loading bar
+  pixelLoader: {
+    loading: {
+      width: ['0%', '100%'],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+    complete: {
+      width: '100%',
+      backgroundColor: '#A3E635',
+      transition: {
+        duration: 0.3,
+        ease: 'easeOut',
+      },
+    },
+  },
+
+  // Spinning matrix
+  matrixSpinner: {
+    animate: {
+      rotate: 360,
+      filter: [
+        'hue-rotate(0deg)',
+        'hue-rotate(120deg)',
+        'hue-rotate(240deg)',
+        'hue-rotate(360deg)',
+      ],
+      transition: {
+        duration: 1.5,
+        repeat: Infinity,
+        ease: 'linear',
+      },
+    },
+  },
+
+  // Success burst
+  successBurst: {
+    hidden: {
+      scale: 0,
+      rotate: -180,
+      opacity: 0,
+    },
+    visible: {
+      scale: [0, 1.2, 1],
+      rotate: 0,
+      opacity: [0, 1, 1],
+      transition: {
+        duration: 0.6,
+        times: [0, 0.7, 1],
+        ease: easings.bounce,
+      },
+    },
+  },
+};
+
+// Custom hooks for dynamic animations
+export const createCustomVariant = (
+  from: Record<string, any>,
+  to: Record<string, any>,
+  transition?: Transition
+): Variants => ({
+  hidden: from,
+  visible: {
+    ...to,
+    transition: transition || { duration: durations.ui, ease: easings.gentle },
+  },
 });
 
-export const createRandomDelay = (maxDelay: number = 0.5) => ({
-  transition: { delay: Math.random() * maxDelay }
-});
+// Gesture-based animations
+export const gestureVariants: Record<string, Variants> = {
+  // Drag constraints
+  draggable: {
+    drag: {
+      scale: 1.05,
+      cursor: 'grabbing',
+      transition: {
+        duration: 0.1,
+      },
+    },
+  },
 
-export const combineVariants = (...variants: Variants[]): Variants => {
-  return variants.reduce((acc, variant) => ({
-    ...acc,
-    ...variant,
-  }), {});
+  // Swipe feedback
+  swipeable: {
+    swipeRight: {
+      x: 20,
+      opacity: 0.8,
+      transition: {
+        duration: 0.1,
+      },
+    },
+    swipeLeft: {
+      x: -20,
+      opacity: 0.8,
+      transition: {
+        duration: 0.1,
+      },
+    },
+  },
+};
+
+export default {
+  easings,
+  durations,
+  entranceVariants,
+  hoverVariants,
+  staggerVariants,
+  pageTransitions,
+  textVariants,
+  particleVariants,
+  loadingVariants,
+  gestureVariants,
+  createCustomVariant,
 };

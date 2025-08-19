@@ -10,6 +10,7 @@ import { SkillsPage } from '@/pages/SkillsPage';
 import { ProjectsPage } from '@/pages/ProjectsPage';
 import { LabPage } from '@/pages/LabPage';
 import { ContactPage } from '@/pages/ContactPage';
+import { AnimationShowcase } from '@/components/AnimationShowcase';
 import { useUIStore } from '@/store/ui';
 
 function App() {
@@ -78,6 +79,7 @@ function App() {
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/lab" element={<LabPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/animations" element={<AnimationShowcase />} />
           </Routes>
         </AnimatePresence>
       </main>

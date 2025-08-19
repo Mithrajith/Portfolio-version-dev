@@ -1,536 +1,439 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useAnimation } from 'framer-motion';
-import { animated, useTrail } from '@react-spring/web';
-import { useGesture } from '@use-gesture/react';
-import { useInView } from 'react-intersection-observer';
-import CountUp from 'react-countup';
-import Confetti from 'react-confetti';
-import { cn } from '@/lib/utils';
-import { hoverVariants, easings } from '@/lib/comprehensive-animations';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { motion, useAnimation, useInView, AnimatePresence } from 'framer-motion';
+import { useRef } from 'react';
+import { 
+  entranceVariants, 
+  hoverVariants, 
+  textVariants, 
+  particleVariants,
+  loadingVariants,
+  easings
+} from '@/lib/comprehensive-animations';
 
-// ===== SCROLL-TRIGGERED ANIMATIONS =====
-interface ScrollAnimateProps {
-  children: React.ReactNode;
-  direction?: 'up' | 'down' | 'left' | 'right' | 'scale' | 'rotate';
+// Enhanced reveal on scroll component
+interface RevealOnScrollProps {
+  children: ReactNode;
+  variant?: keyof typeof entranceVariants;
   delay?: number;
-  duration?: number;
+  threshold?: number;
   className?: string;
 }
 
-export const ScrollAnimate: React.FC<ScrollAnimateProps> = ({
+export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
   children,
-  direction = 'up',
+  variant = 'pixelDissolve',
   delay = 0,
-  duration = 0.6,
-  className,
+  threshold = 0.1,
+  className = '',
 }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: threshold });
   const controls = useAnimation();
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
 
   useEffect(() => {
-    if (inView) {
+    if (isInView) {
       controls.start('visible');
     }
-  }, [controls, inView]);
-
-  const variants = {
-    hidden: {
-      opacity: 0,
-      ...(direction === 'up' && { y: 60 }),
-      ...(direction === 'down' && { y: -60 }),
-      ...(direction === 'left' && { x: 60 }),
-      ...(direction === 'right' && { x: -60 }),
-      ...(direction === 'scale' && { scale: 0.8 }),
-      ...(direction === 'rotate' && { rotate: 20 }),
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      scale: 1,
-      rotate: 0,
-      transition: {
-        duration,
-        delay,
-        ease: easings.easeOut,
-      },
-    },
-  };
+  }, [isInView, controls]);
 
   return (
     <motion.div
       ref={ref}
+      className={className}
+      variants={entranceVariants[variant]}
       initial="hidden"
       animate={controls}
-      variants={variants}
-      className={className}
+      transition={{ delay }}
     >
       {children}
     </motion.div>
   );
 };
 
-// ===== PARALLAX SCROLL COMPONENT =====
-interface ParallaxElementProps {
-  children: React.ReactNode;
-  speed?: number;
+// Interactive hover card with multiple effects
+interface InteractiveCardProps {
+  children: ReactNode;
+  variant?: keyof typeof hoverVariants;
   className?: string;
+  onClick?: () => void;
 }
 
-export const ParallaxElement: React.FC<ParallaxElementProps> = ({
+export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   children,
-  speed = 0.5,
-  className,
+  variant = 'superLift',
+  className = '',
+  onClick,
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100 * speed]);
-
   return (
-    <motion.div ref={ref} style={{ y }} className={className}>
+    <motion.div
+      className={`cursor-pointer ${className}`}
+      variants={hoverVariants[variant]}
+      initial="rest"
+      whileHover="hover"
+      whileTap="tap"
+      onClick={onClick}
+    >
       {children}
     </motion.div>
   );
 };
 
-// ===== MOUSE TRACKING COMPONENT =====
-interface MagneticProps {
-  children: React.ReactNode;
-  strength?: number;
-  className?: string;
-}
-
-export const MagneticDiv: React.FC<MagneticProps> = ({
-  children,
-  strength = 0.3,
-  className,
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const bind = useGesture(
-    {
-      onMove: ({ xy: [x, y] }) => {
-        if (ref.current && isHovered) {
-          const rect = ref.current.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          const deltaX = (x - centerX) * strength;
-          const deltaY = (y - centerY) * strength;
-          
-          ref.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-        }
-      },
-      onPointerEnter: () => setIsHovered(true),
-      onPointerLeave: () => {
-        setIsHovered(false);
-        if (ref.current) {
-          ref.current.style.transform = 'translate(0px, 0px)';
-        }
-      },
-    },
-    { eventOptions: { passive: false } }
-  );
-
-  return (
-    <div
-      {...bind()}
-      ref={ref}
-      className={cn("transition-transform duration-300 ease-out", className)}
-    >
-      {children}
-    </div>
-  );
-};
-
-// ===== TYPEWRITER ANIMATION =====
-interface TypewriterAnimationProps {
+// Typewriter text animation
+interface TypewriterTextProps {
   text: string;
   speed?: number;
-  delay?: number;
-  cursor?: boolean;
   className?: string;
   onComplete?: () => void;
 }
 
-export const TypewriterAnimation: React.FC<TypewriterAnimationProps> = ({
+export const TypewriterText: React.FC<TypewriterTextProps> = ({
   text,
-  speed = 50,
-  delay = 0,
-  cursor = true,
-  className,
+  speed = 100,
+  className = '',
   onComplete,
 }) => {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      let i = 0;
-      const timer = setInterval(() => {
-        setDisplayedText(text.slice(0, i + 1));
-        i++;
-        if (i >= text.length) {
-          clearInterval(timer);
-          onComplete?.();
-          if (!cursor) setShowCursor(false);
-        }
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
       }, speed);
 
-      return () => clearInterval(timer);
-    }, delay);
-
-    return () => clearTimeout(timeout);
-  }, [text, speed, delay, onComplete, cursor]);
-
-  useEffect(() => {
-    if (cursor) {
-      const cursorTimer = setInterval(() => {
-        setShowCursor(prev => !prev);
-      }, 530);
-      return () => clearInterval(cursorTimer);
+      return () => clearTimeout(timeout);
+    } else {
+      onComplete?.();
+      // Hide cursor after completion
+      setTimeout(() => setShowCursor(false), 1000);
     }
-  }, [cursor]);
+  }, [currentIndex, text, speed, onComplete]);
+
+  // Cursor blink effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+
+    return () => clearInterval(cursorInterval);
+  }, []);
 
   return (
     <span className={className}>
-      {displayedText}
-      {cursor && (
+      {displayText}
+      {showCursor && (
         <motion.span
-          animate={{ opacity: showCursor ? 1 : 0 }}
-          className="inline-block w-0.5 h-5 bg-violet-2 ml-1"
-        />
+          className="inline-block w-0.5 h-em bg-current ml-1"
+          animate={{ opacity: [1, 0, 1] }}
+          transition={{ duration: 1, repeat: Infinity }}
+        >
+          |
+        </motion.span>
       )}
     </span>
   );
 };
 
-// ===== GLITCH EFFECT COMPONENT =====
-interface GlitchEffectProps {
-  children: React.ReactNode;
-  intensity?: 'low' | 'medium' | 'high';
-  trigger?: 'hover' | 'constant';
+// Glitch text effect
+interface GlitchTextProps {
+  text: string;
   className?: string;
+  trigger?: 'hover' | 'auto' | 'click';
 }
 
-export const GlitchEffect: React.FC<GlitchEffectProps> = ({
-  children,
-  intensity = 'medium',
+export const GlitchText: React.FC<GlitchTextProps> = ({
+  text,
+  className = '',
   trigger = 'hover',
-  className,
 }) => {
-  const intensityMap = {
-    low: { offset: 1, duration: 0.1 },
-    medium: { offset: 2, duration: 0.2 },
-    high: { offset: 4, duration: 0.3 },
+  const [isGlitching, setIsGlitching] = useState(false);
+
+  const triggerGlitch = () => {
+    setIsGlitching(true);
+    setTimeout(() => setIsGlitching(false), 500);
   };
 
-  const { offset, duration } = intensityMap[intensity];
+  useEffect(() => {
+    if (trigger === 'auto') {
+      const interval = setInterval(triggerGlitch, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [trigger]);
 
-  const glitchVariants = {
-    normal: {
-      textShadow: '0 0 0 transparent',
-      transform: 'translate(0, 0)',
-    },
-    glitch: {
-      textShadow: [
-        `${offset}px 0 0 #ff0080, -${offset}px 0 0 #00ffff`,
-        `${offset * 2}px 0 0 #ff0080, -${offset * 2}px 0 0 #00ffff`,
-        `${offset}px 0 0 #ff0080, -${offset}px 0 0 #00ffff`,
-      ],
-      transform: [
-        'translate(0, 0)',
-        `translate(${offset}px, 0)`,
-        `translate(-${offset}px, 0)`,
-        'translate(0, 0)',
-      ],
-      transition: { duration, repeat: Infinity, repeatDelay: 2 },
-    },
+  const handleInteraction = () => {
+    if (trigger === 'hover' || trigger === 'click') {
+      triggerGlitch();
+    }
   };
 
   return (
+    <motion.span
+      className={`relative inline-block ${className}`}
+      variants={textVariants.glitchText}
+      initial="rest"
+      animate={isGlitching ? 'animate' : 'rest'}
+      onHoverStart={trigger === 'hover' ? handleInteraction : undefined}
+      onClick={trigger === 'click' ? handleInteraction : undefined}
+    >
+      {text}
+    </motion.span>
+  );
+};
+
+// Floating particles background
+interface FloatingParticlesProps {
+  count?: number;
+  className?: string;
+}
+
+export const FloatingParticles: React.FC<FloatingParticlesProps> = ({
+  count = 20,
+  className = '',
+}) => {
+  return (
+    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+      {[...Array(count)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-violet-2/30 rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          variants={particleVariants.floating}
+          animate="animate"
+          transition={{
+            delay: Math.random() * 2,
+            duration: 4 + Math.random() * 4,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Morphing icon component
+interface MorphingIconProps {
+  icons: React.ComponentType<any>[];
+  size?: number;
+  interval?: number;
+  className?: string;
+}
+
+export const MorphingIcon: React.FC<MorphingIconProps> = ({
+  icons,
+  size = 24,
+  interval = 2000,
+  className = '',
+}) => {
+  const [currentIconIndex, setCurrentIconIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentIconIndex(prev => (prev + 1) % icons.length);
+    }, interval);
+
+    return () => clearInterval(intervalId);
+  }, [icons.length, interval]);
+
+  return (
+    <div className={`relative ${className}`} style={{ width: size, height: size }}>
+      <AnimatePresence mode="wait">
+        {icons.map((Icon, index) => (
+          index === currentIconIndex && (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, scale: 0.5, rotate: 180 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <Icon size={size} />
+            </motion.div>
+          )
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// Loading indicator with pixel style
+interface PixelLoaderProps {
+  isLoading: boolean;
+  progress?: number;
+  className?: string;
+}
+
+export const PixelLoader: React.FC<PixelLoaderProps> = ({
+  isLoading,
+  progress,
+  className = '',
+}) => {
+  return (
+    <div className={`relative w-full h-2 bg-surface rounded ${className}`}>
+      <motion.div
+        className="absolute top-0 left-0 h-full bg-violet rounded"
+        variants={loadingVariants.pixelLoader}
+        animate={isLoading ? (progress !== undefined ? 'complete' : 'loading') : 'complete'}
+        style={{ width: progress !== undefined ? `${progress}%` : '0%' }}
+      />
+      
+      {/* Pixel blocks overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 flex">
+          {[...Array(10)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="flex-1 border-r border-bg/20 last:border-r-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 0.8,
+                delay: i * 0.1,
+                repeat: Infinity,
+                repeatDelay: 1,
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Magnetic element that follows cursor
+interface MagneticElementProps {
+  children: ReactNode;
+  strength?: number;
+  className?: string;
+}
+
+export const MagneticElement: React.FC<MagneticElementProps> = ({
+  children,
+  strength = 0.3,
+  className = '',
+}) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!ref.current) return;
+      
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      setMousePosition({
+        x: (e.clientX - centerX) * strength,
+        y: (e.clientY - centerY) * strength,
+      });
+    };
+
+    if (isHovering) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [isHovering, strength]);
+
+  return (
     <motion.div
-      variants={glitchVariants}
-      initial="normal"
-      {...(trigger === 'hover' ? { whileHover: 'glitch' } : { animate: 'glitch' })}
+      ref={ref}
       className={className}
+      animate={isHovering ? {
+        x: mousePosition.x,
+        y: mousePosition.y,
+      } : {
+        x: 0,
+        y: 0,
+      }}
+      transition={easings.spring.soft}
+      onHoverStart={() => setIsHovering(true)}
+      onHoverEnd={() => setIsHovering(false)}
     >
       {children}
     </motion.div>
   );
 };
 
-// ===== PARTICLE FIELD =====
-interface ParticleFieldProps {
-  count?: number;
-  color?: string;
-  size?: number;
-  speed?: number;
+// Staggered grid animation
+interface StaggeredGridProps {
+  children: ReactNode[];
+  staggerDelay?: number;
   className?: string;
 }
 
-export const ParticleField: React.FC<ParticleFieldProps> = ({
-  count = 20,
-  color = '#7C3AED',
-  size = 2,
-  speed = 1,
-  className,
-}) => {
-  const particles = Array.from({ length: count }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    delay: Math.random() * 2,
-  }));
-
-  return (
-    <div className={cn("absolute inset-0 overflow-hidden pointer-events-none", className)}>
-      {particles.map((particle) => (
-        <motion.div
-          key={particle.id}
-          className="absolute rounded-full"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            width: size,
-            height: size,
-            backgroundColor: color,
-          }}
-          animate={{
-            y: [-20, 20],
-            x: [-10, 10],
-            opacity: [0.3, 1, 0.3],
-            scale: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 3 / speed,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            delay: particle.delay,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-// ===== STAGGER ANIMATION WRAPPER =====
-interface StaggerWrapperProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const StaggerWrapper: React.FC<StaggerWrapperProps> = ({
+export const StaggeredGrid: React.FC<StaggeredGridProps> = ({
   children,
-  className,
+  staggerDelay = 0.1,
+  className = '',
 }) => {
-  const trail = useTrail(React.Children.count(children), {
-    from: { opacity: 0, transform: 'translate3d(0,40px,0)' },
-    to: { opacity: 1, transform: 'translate3d(0,0px,0)' },
-    config: { mass: 1, tension: 280, friction: 60 },
-  });
-
   return (
-    <div className={className}>
-      {trail.map((style, index) => (
-        <animated.div key={index} style={style}>
-          {React.Children.toArray(children)[index]}
-        </animated.div>
-      ))}
-    </div>
-  );
-};
-
-// ===== 3D HOVER CARD =====
-interface HoverCard3DProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const HoverCard3D: React.FC<HoverCard3DProps> = ({ children, className }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const bind = useGesture(
-    {
-      onMove: ({ xy: [x, y] }) => {
-        if (ref.current) {
-          const rect = ref.current.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          const rotateX = (y - centerY) / 10;
-          const rotateY = (centerX - x) / 10;
-          
-          ref.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        }
-      },
-      onPointerLeave: () => {
-        if (ref.current) {
-          ref.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-        }
-      },
-    },
-    { eventOptions: { passive: false } }
-  );
-
-  return (
-    <div
-      {...bind()}
-      ref={ref}
-      className={cn("transition-transform duration-200 ease-out transform-gpu", className)}
-      style={{ transformStyle: 'preserve-3d' }}
-    >
-      {children}
-    </div>
-  );
-};
-
-// ===== ANIMATED NUMBER COUNTER =====
-interface NumberCounterProps {
-  value: number;
-  duration?: number;
-  delay?: number;
-  suffix?: string;
-  className?: string;
-}
-
-export const NumberCounter: React.FC<NumberCounterProps> = ({
-  value,
-  duration = 2,
-  delay = 0,
-  suffix = '',
-  className,
-}) => {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.3,
-  });
-
-  return (
-    <div ref={ref} className={className}>
-      {inView && (
-        <CountUp
-          end={value}
-          duration={duration}
-          delay={delay}
-          suffix={suffix}
-          useEasing
-          preserveValue
-        />
-      )}
-    </div>
-  );
-};
-
-// ===== FLOATING ACTION ELEMENT =====
-interface FloatingActionProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  className?: string;
-}
-
-export const FloatingAction: React.FC<FloatingActionProps> = ({
-  children,
-  onClick,
-  className,
-}) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.button
-      className={cn(
-        "fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg",
-        "flex items-center justify-center cursor-pointer",
-        "bg-violet hover:bg-violet-2 text-white z-50",
-        className
-      )}
-      onClick={onClick}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      variants={hoverVariants.lift}
-      initial="rest"
-      whileHover="hover"
-      whileTap="tap"
-      animate={{
-        y: [0, -2, 0],
-        transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
+    <motion.div
+      className={className}
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: staggerDelay,
+          },
+        },
       }}
     >
-      <motion.div
-        animate={{ rotate: isHovered ? 180 : 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {children}
-      </motion.div>
-    </motion.button>
+      {children.map((child, index) => (
+        <motion.div
+          key={index}
+          variants={{
+            hidden: { opacity: 0, y: 20, scale: 0.9 },
+            visible: { opacity: 1, y: 0, scale: 1 },
+          }}
+        >
+          {child}
+        </motion.div>
+      ))}
+    </motion.div>
   );
 };
 
-// ===== CELEBRATION CONFETTI =====
-interface CelebrationProps {
-  active: boolean;
-  duration?: number;
-}
-
-export const Celebration: React.FC<CelebrationProps> = ({
-  active,
-  duration = 3000,
-}) => {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    if (active) {
-      setShow(true);
-      const timer = setTimeout(() => setShow(false), duration);
-      return () => clearTimeout(timer);
-    }
-  }, [active, duration]);
-
-  if (!show) return null;
-
-  return (
-    <Confetti
-      width={window.innerWidth}
-      height={window.innerHeight}
-      recycle={false}
-      numberOfPieces={200}
-      colors={['#7C3AED', '#A78BFA', '#22D3EE', '#A3E635', '#FB7185']}
-    />
-  );
-};
-
-// ===== MORPHING LOGO =====
-interface MorphingLogoProps {
-  shapes: string[];
-  duration?: number;
+// Pulse ring animation
+interface PulseRingProps {
+  size?: number;
+  color?: string;
   className?: string;
 }
 
-export const MorphingLogo: React.FC<MorphingLogoProps> = ({
-  shapes,
-  duration = 2,
-  className,
+export const PulseRing: React.FC<PulseRingProps> = ({
+  size = 100,
+  color = 'rgba(124, 58, 237, 0.5)',
+  className = '',
 }) => {
   return (
-    <svg className={className} viewBox="0 0 100 100">
-      <motion.path
-        d={shapes[0]}
-        animate={{ d: shapes }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          repeatType: 'loop',
-          ease: 'easeInOut',
-        }}
-        fill="currentColor"
-      />
-    </svg>
+    <div className={`relative ${className}`} style={{ width: size, height: size }}>
+      {[...Array(3)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0 rounded-full border-2"
+          style={{ borderColor: color }}
+          animate={{
+            scale: [0.8, 2],
+            opacity: [1, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: i * 0.6,
+            ease: 'easeOut',
+          }}
+        />
+      ))}
+    </div>
   );
 };
