@@ -9,36 +9,60 @@ const skillCategories = [
     name: 'Frontend',
     color: 'violet',
     skills: [
-      { name: 'React', level: 90, years: 4 },
-      { name: 'TypeScript', level: 85, years: 3 },
-      { name: 'Next.js', level: 80, years: 2 },
-      { name: 'Tailwind CSS', level: 95, years: 3 },
-      { name: 'Framer Motion', level: 75, years: 2 },
-      { name: 'Vue.js', level: 70, years: 2 },
+      { name: 'React.js', level: 85, years: 3 },
+      { name: 'JavaScript (ES6+)', level: 90, years: 4 },
+      { name: 'HTML5', level: 95, years: 4 },
+      { name: 'CSS3', level: 90, years: 4 },
+      { name: 'Tailwind CSS', level: 85, years: 2 },
+      { name: 'Framer Motion', level: 80, years: 2 },
     ],
   },
   {
     name: 'Backend',
     color: 'cyan',
     skills: [
-      { name: 'Node.js', level: 85, years: 4 },
-      { name: 'Python', level: 80, years: 3 },
-      { name: 'Express.js', level: 90, years: 4 },
-      { name: 'PostgreSQL', level: 75, years: 3 },
-      { name: 'MongoDB', level: 80, years: 3 },
-      { name: 'Redis', level: 70, years: 2 },
+      { name: 'Python', level: 90, years: 4 },
+      { name: 'Flask', level: 85, years: 3 },
+      { name: 'FastAPI', level: 75, years: 2 },
+      { name: 'REST APIs', level: 80, years: 3 },
+      { name: 'MongoDB', level: 75, years: 2 },
+      { name: 'SQL/SQLite', level: 80, years: 3 },
     ],
   },
   {
-    name: 'Tools & Others',
+    name: 'ML & AI',
+    color: 'purple',
+    skills: [
+      { name: 'TensorFlow', level: 80, years: 2 },
+      { name: 'Scikit-learn', level: 85, years: 3 },
+      { name: 'OpenCV', level: 85, years: 2 },
+      { name: 'YOLO', level: 75, years: 1 },
+      { name: 'ArcFace', level: 70, years: 1 },
+      { name: 'Computer Vision', level: 80, years: 2 },
+    ],
+  },
+  {
+    name: 'Data Science',
     color: 'lime',
     skills: [
-      { name: 'Git', level: 95, years: 5 },
-      { name: 'Docker', level: 75, years: 2 },
-      { name: 'AWS', level: 70, years: 2 },
-      { name: 'Figma', level: 80, years: 3 },
-      { name: 'Linux', level: 85, years: 4 },
-      { name: 'GraphQL', level: 75, years: 2 },
+      { name: 'Pandas', level: 85, years: 3 },
+      { name: 'NumPy', level: 90, years: 3 },
+      { name: 'Matplotlib', level: 80, years: 2 },
+      { name: 'Plotly', level: 75, years: 2 },
+      { name: 'Jupyter Notebook', level: 90, years: 3 },
+      { name: 'Data Visualization', level: 80, years: 2 },
+    ],
+  },
+  {
+    name: 'Tools',
+    color: 'cyan',
+    skills: [
+      { name: 'Git & GitHub', level: 90, years: 4 },
+      { name: 'VS Code', level: 95, years: 4 },
+      { name: 'Linux (Arch)', level: 85, years: 3 },
+      { name: 'Netlify', level: 80, years: 2 },
+      { name: 'GitHub Actions', level: 70, years: 1 },
+      { name: 'Responsive Design', level: 90, years: 3 },
     ],
   },
 ];
@@ -69,7 +93,7 @@ export const SkillsPage: React.FC = () => {
               Skills & Expertise
             </h1>
             <p className="text-muted max-w-2xl mx-auto text-lg">
-              Technologies and tools I use to bring ideas to life.
+              From web development to machine learning - the technologies I use to build intelligent applications.
             </p>
           </motion.div>
 
@@ -191,14 +215,14 @@ export const SkillsPage: React.FC = () => {
 
             <motion.div variants={pixelVariants}>
               <PixelCard className="text-center p-4">
-                <div className="font-display text-2xl text-cyan mb-1">5+</div>
+                <div className="font-display text-2xl text-cyan mb-1">4+</div>
                 <div className="text-muted text-sm">Years Coding</div>
               </PixelCard>
             </motion.div>
 
             <motion.div variants={pixelVariants}>
               <PixelCard className="text-center p-4">
-                <div className="font-display text-2xl text-lime mb-1">50+</div>
+                <div className="font-display text-2xl text-lime mb-1">7+</div>
                 <div className="text-muted text-sm">Projects Built</div>
               </PixelCard>
             </motion.div>

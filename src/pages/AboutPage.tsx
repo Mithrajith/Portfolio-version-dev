@@ -9,41 +9,47 @@ import { pageVariants, pixelVariants, staggerContainer } from '@/lib/animations'
 const timeline = [
   {
     year: '2019',
-    title: 'Started Coding Journey',
+    title: 'Started Programming Journey',
     company: 'Self-taught',
-    description: 'Began learning programming with passion for creating digital experiences.',
+    description: 'Began learning Python and web development with passion for creating digital solutions.',
   },
   {
     year: '2020',
-    title: 'Frontend Developer',
-    company: 'Creative Agency',
-    description: 'Specialized in creating interactive user interfaces with attention to detail.',
+    title: 'Frontend Development',
+    company: 'Learning Phase',
+    description: 'Mastered React.js, JavaScript ES6+, HTML5, CSS3 and responsive design principles.',
+  },
+  {
+    year: '2021',
+    title: 'Backend Development',
+    company: 'Skill Expansion',
+    description: 'Learned Python Flask, FastAPI, and REST API development for full-stack capabilities.',
   },
   {
     year: '2022',
-    title: 'Full Stack Developer',
-    company: 'Digital Solutions Co.',
-    description: 'Built responsive web applications and APIs serving thousands of users.',
+    title: 'Machine Learning & AI',
+    company: 'Tech Innovation',
+    description: 'Dove into TensorFlow, OpenCV, YOLO, ArcFace for computer vision and AI applications.',
   },
   {
-    year: '2024',
-    title: 'Senior Full Stack Developer',
-    company: 'Tech Innovators Inc.',
-    description: 'Leading development of scalable web applications with modern tech stack.',
+    year: '2023',
+    title: 'Data Science Focus',
+    company: 'Advanced Learning',
+    description: 'Specialized in Pandas, NumPy, data visualization and model training techniques.',
   },
   {
-    year: '2025',
-    title: 'Open to New Opportunities',
-    company: 'Freelance & Remote',
-    description: 'Exploring exciting projects and collaborations in cutting-edge technologies.',
+    year: '2024-2025',
+    title: 'Project Implementation',
+    company: 'Active Development',
+    description: 'Building real-world projects including facial recognition, ID recognition, and AI applications.',
   },
 ];
 
 const stats = [
-  { label: 'Lines of Code', value: '500K+', icon: Coffee },
-  { label: 'Projects Completed', value: '50+', icon: Zap },
-  { label: 'Happy Clients', value: '30+', icon: Calendar },
-  { label: 'Years Experience', value: '5+', icon: MapPin },
+  { label: 'Projects Built', value: '7+', icon: Coffee },
+  { label: 'Technologies', value: '15+', icon: Zap },
+  { label: 'ML Models', value: '5+', icon: Calendar },
+  { label: 'Coffee Cups', value: '∞', icon: MapPin },
 ];
 
 export const AboutPage: React.FC = () => {
@@ -68,7 +74,7 @@ export const AboutPage: React.FC = () => {
               About Me
             </h1>
             <p className="text-muted max-w-2xl mx-auto text-lg">
-              A passionate developer who loves crafting digital experiences with attention to detail and a pixel-perfect approach.
+              Enthusiastic about Web Development, ML, and AI. Mixing creativity + logic to build the future, one algorithm at a time.
             </p>
           </motion.div>
 
@@ -82,20 +88,23 @@ export const AboutPage: React.FC = () => {
             </motion.div>
 
             <motion.div className="space-y-4" variants={pixelVariants}>
-              <h2 className="font-display text-2xl text-text">Hi, I'm Mithrajith!</h2>
+              <h2 className="font-display text-2xl text-text">Hi, I'm MITHRAJITH!</h2>
               <div className="space-y-3 text-muted">
                 <p>
-                  I'm a full-stack developer with a passion for creating beautiful, 
-                  functional web applications. My journey started with curiosity about 
-                  how websites work, and it evolved into a deep love for coding and problem-solving.
+                  Passionate Full-Stack Developer and Machine Learning Enthusiast who loves 
+                  crafting responsive UIs, building intelligent applications, and exploring data science. 
+                  Always learning, always innovating.
                 </p>
                 <p>
-                  When I'm not coding, you'll find me exploring new technologies, 
-                  contributing to open source projects, or experimenting with pixel art and retro aesthetics.
+                  My daily routine: ☕ coffee + code, learning ML algorithms, building cool projects, 
+                  analyzing data, and crafting beautiful UIs. Dreams in Python and turns coffee into code!
                 </p>
                 <p>
-                  I believe in writing clean, maintainable code and creating user experiences 
-                  that are both delightful and accessible.
+                  Philosophy: "Building the future, one algorithm at a time." 
+                  I mix creativity + logic → love both design and algorithms.
+                </p>
+                <p className="text-cyan">
+                  🐧 Arch Linux power user who believes in open source and continuous learning!
                 </p>
               </div>
             </motion.div>

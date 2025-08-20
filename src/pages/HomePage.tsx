@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
@@ -15,11 +15,11 @@ const subtitle = "Passionate Full-Stack Developer and Machine Learning Enthusias
 
 const techStack = [
   { name: "React.js", icon: Code2, color: "text-violet-2", bg: "bg-violet/20" },
-  { name: "Python", icon: Brain, color: "text-yellow-400", bg: "bg-yellow-400/20" },
-  { name: "TensorFlow", icon: Shield, color: "text-orange-400", bg: "bg-orange-400/20" },
-  { name: "Flask", icon: Database, color: "text-green-400", bg: "bg-green-400/20" },
-  { name: "OpenCV", icon: Monitor, color: "text-blue-400", bg: "bg-blue-400/20" },
-  { name: "MongoDB", icon: Database, color: "text-emerald-400", bg: "bg-emerald-400/20" },
+  { name: "JavaScript", icon: Code2, color: "text-yellow-400", bg: "bg-yellow-400/20" },
+  { name: "Python", icon: Brain, color: "text-green-400", bg: "bg-green-400/20" },
+  { name: "Flask", icon: Database, color: "text-blue-400", bg: "bg-blue-400/20" },
+  { name: "TensorFlow", icon: Shield, color: "text-purple-400", bg: "bg-purple-400/20" },
+  { name: "OpenCV", icon: Monitor, color: "text-cyan", bg: "bg-cyan/20" },
 ];
 
 const achievements = [
@@ -33,47 +33,39 @@ const services = [
   {
     icon: Monitor,
     title: "Frontend Development",
-    desc: "React.js applications with pixel-perfect animations and responsive design",
+    desc: "React.js applications with responsive design and modern animations",
     color: "violet",
-    features: ["React.js", "JavaScript ES6+", "Tailwind CSS", "Framer Motion"]
+    features: ["React.js", "JavaScript (ES6+)", "HTML5", "CSS3", "Tailwind CSS"]
+  },
+  {
+    icon: Database,
+    title: "Backend Development", 
+    desc: "Python-based APIs and server applications with Flask",
+    color: "green",
+    features: ["Python", "Flask", "FastAPI", "REST APIs"]
   },
   {
     icon: Brain,
     title: "Machine Learning & AI",
-    desc: "Intelligent applications using TensorFlow, OpenCV, and computer vision",
+    desc: "Computer Vision and AI applications with TensorFlow and OpenCV",
     color: "purple",
-    features: ["TensorFlow", "OpenCV", "YOLO", "ArcFace", "Scikit-learn"]
-  },
-  {
-    icon: Database,
-    title: "Backend Development",
-    desc: "Python-based APIs and server-side applications with Flask and FastAPI",
-    color: "green",
-    features: ["Python", "Flask", "FastAPI", "REST APIs", "MongoDB"]
+    features: ["TensorFlow", "Scikit-learn", "OpenCV", "YOLO", "ArcFace"]
   },
   {
     icon: Globe,
-    title: "Data Science",
-    desc: "Data analysis, visualization, and model training for intelligent insights",
+    title: "Data Science & Analytics",
+    desc: "Data analysis, visualization and model training",
     color: "cyan",
-    features: ["Pandas", "NumPy", "Matplotlib", "Plotly", "Jupyter"]
+    features: ["Pandas", "NumPy", "Matplotlib", "Plotly"]
   },
 ];
 
 export const HomePage: React.FC = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollY } = useScroll();
   const parallaxY = useTransform(scrollY, [0, 500], [0, -100]);
 
   useEffect(() => {
     document.title = "MITHRAJITH - Full Stack Developer & ML Enthusiast";
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
@@ -84,11 +76,21 @@ export const HomePage: React.FC = () => {
       animate="in"
       exit="out"
     >
-      {/* Dynamic mouse-following gradient */}
-      <div 
+      {/* Continuous animated gradient background */}
+      <motion.div 
         className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(139, 92, 246, 0.1), transparent 40%)`
+        animate={{
+          background: [
+            "radial-gradient(600px circle at 20% 30%, rgba(139, 92, 246, 0.15), transparent 40%)",
+            "radial-gradient(600px circle at 80% 70%, rgba(139, 92, 246, 0.15), transparent 40%)",
+            "radial-gradient(600px circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 40%)",
+            "radial-gradient(600px circle at 20% 30%, rgba(139, 92, 246, 0.15), transparent 40%)"
+          ]
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "linear"
         }}
       />
 
@@ -495,7 +497,7 @@ export const HomePage: React.FC = () => {
               </p>
 
               <div className="flex flex-wrap justify-center gap-2 mt-4">
-                {['React.js', 'JavaScript', 'Tailwind CSS', 'Framer Motion'].map((skill) => (
+                {['React.js', 'JavaScript', 'HTML5', 'CSS3'].map((skill) => (
                   <span key={skill} className="px-2 py-1 bg-violet/20 text-violet-2 text-xs rounded border border-violet/30">
                     {skill}
                   </span>
@@ -543,7 +545,7 @@ export const HomePage: React.FC = () => {
               </p>
 
               <div className="flex flex-wrap justify-center gap-2 mt-4">
-                {['Python', 'TensorFlow', 'OpenCV', 'Scikit-learn'].map((skill) => (
+                {['TensorFlow', 'OpenCV', 'YOLO', 'ArcFace'].map((skill) => (
                   <span key={skill} className="px-2 py-1 bg-cyan/20 text-cyan text-xs rounded border border-cyan/30">
                     {skill}
                   </span>
