@@ -3,8 +3,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, Sparkles, Code2, Mail, Trophy, 
-  Star, Heart, Coffee, Users, Globe, Database, 
-  Smartphone, Monitor, Palette, Brain, Shield
+  Star, Heart, Coffee, Globe, Database, 
+   Monitor, Palette, Brain, Shield
 } from 'lucide-react';
 import { PixelCard } from '@/components/ui/PixelCard';
 import { PixelButton } from '@/components/ui/PixelButton';
