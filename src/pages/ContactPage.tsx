@@ -8,10 +8,10 @@ import { pageVariants, pixelVariants, staggerContainer } from '@/lib/animations'
 const socialLinks = [
   {
     name: 'Email',
-    url: 'mailto:hello@Mithrajith.dev',
+    url: 'mailto:mithrajith46@gmail.com',
     icon: Mail,
     color: 'violet',
-    handle: 'hello@Mithrajith.dev',
+    handle: 'mithrajith46@gmail.com',
   },
   {
     name: 'GitHub',
@@ -22,10 +22,10 @@ const socialLinks = [
   },
   {
     name: 'LinkedIn',
-    url: 'https://linkedin.com/in/Mithrajith',
+    url: 'www.linkedin.com/in/mithrajitks046',
     icon: Linkedin,
     color: 'cyan',
-    handle: '/in/Mithrajith',
+    handle: 'mithrajitks046',
   },
   {
     name: 'Twitter',
@@ -249,7 +249,7 @@ export const ContactPage: React.FC = () => {
                 </PixelCard>
               </motion.div>
 
-              <motion.div variants={pixelVariants}>
+              {/* <motion.div variants={pixelVariants}>
                 <PixelCard className="p-6">
                   <h3 className="font-display text-lg text-text mb-4">Quick Info</h3>
                   <div className="space-y-3 text-sm">
@@ -271,14 +271,13 @@ export const ContactPage: React.FC = () => {
                     </div>
                   </div>
                 </PixelCard>
-              </motion.div>
+              </motion.div> */}
 
               <motion.div variants={pixelVariants}>
                 <PixelCard className="p-6 bg-violet/5 border border-violet/20">
                   <h3 className="font-display text-lg text-violet-2 mb-2">Let's Build Something!</h3>
                   <p className="text-muted text-sm">
-                    Whether it's a new project, collaboration, or just a chat about tech and pixels, 
-                    I'd love to hear from you. Every great project starts with a conversation.
+                    Every great project starts with a conversation.
                   </p>
                 </PixelCard>
               </motion.div>

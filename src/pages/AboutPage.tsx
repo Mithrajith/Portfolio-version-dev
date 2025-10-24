@@ -8,40 +8,46 @@ import { pageVariants, pixelVariants, staggerContainer } from '@/lib/animations'
 
 const timeline = [
   {
-    year: '2019',
-    title: 'Started Programming Journey',
-    company: 'Self-taught',
-    description: 'Began learning Python and web development with passion for creating digital solutions.',
+    year: 'Sep 2023 – Dec 2023',
+    title: 'Project Hub',
+    company: 'Independent Project',
+    description:
+      'Developed a centralized platform to manage and showcase projects efficiently. Implemented full-stack features using React.js, Node.js, and MongoDB with responsive UI and CRUD functionalities.',
   },
   {
-    year: '2020',
-    title: 'Frontend Development',
-    company: 'Learning Phase',
-    description: 'Mastered React.js, JavaScript ES6+, HTML5, CSS3 and responsive design principles.',
+    year: 'Jan 2024 – Mar 2024',
+    title: 'SLAP (Student Leave Application Portal)',
+    company: 'Academic Project',
+    description:
+      'Built a digital leave management system for students and faculty. Focused on authentication, database management, and workflow automation using Flask, PostgreSQL, and RESTful APIs.',
   },
   {
-    year: '2021',
-    title: 'Backend Development',
-    company: 'Skill Expansion',
-    description: 'Learned Python Flask, FastAPI, and REST API development for full-stack capabilities.',
+    year: 'Mar 2024 – Jun 2024',
+    title: 'AI Music Player',
+    company: 'Personal AI Project',
+    description:
+      'Created an AI-powered music player that recommends songs using machine learning models trained on user listening patterns. Integrated Python ML backend with a React frontend.',
   },
   {
-    year: '2022',
-    title: 'Machine Learning & AI',
-    company: 'Tech Innovation',
-    description: 'Dove into TensorFlow, OpenCV, YOLO, ArcFace for computer vision and AI applications.',
+    year: 'Jun 2024 – Aug 2024',
+    title: 'Campus Compass',
+    company: 'Team Collaboration',
+    description:
+      'Developed a campus navigation and information system featuring geolocation, map-based UI, and smart search. Used React, Leaflet.js, and Node.js APIs.',
   },
   {
-    year: '2023',
-    title: 'Data Science Focus',
-    company: 'Advanced Learning',
-    description: 'Specialized in Pandas, NumPy, data visualization and model training techniques.',
+    year: 'Sep 2024 – Present',
+    title: 'MARLIN (AI-Driven Unified Platform for CMLRE)',
+    company: 'Smart India Hackathon 2025',
+    description:
+      'Leading AI/ML module for MARLIN—an ocean data lakehouse integrating Delta Lake architecture, AI-based quality control, and intelligent species identification using CNN and Isolation Forest models.',
   },
   {
-    year: '2024-2025',
-    title: 'Project Implementation',
-    company: 'Active Development',
-    description: 'Building real-world projects including facial recognition, ID recognition, and AI applications.',
+    year: 'Oct 2024 – Present',
+    title: 'Smart Digital Twin for Predictive Maintenance',
+    company: 'SIH 2025 Project',
+    description:
+      'Developing ML models for reduced-order modeling and predictive maintenance using Python, TensorFlow, and MATLAB-based simulation data, integrated with visualization dashboards.',
   },
 ];
 

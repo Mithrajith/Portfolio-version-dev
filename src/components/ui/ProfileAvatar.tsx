@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getProfileImages, preloadImages } from '../../lib/imageLoader';
 
 interface ProfileAvatarProps {
   className?: string;
@@ -8,14 +9,72 @@ interface ProfileAvatarProps {
 export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ className = '' }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
+  const [images, setImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [autoRotate, setAutoRotate] = useState(false);
 
-  const images = [
-    '/profile.jpeg',
-    '/profile2.jpeg'
-  ];
+  useEffect(() => {
+    // Load all images from the photo folder
+    const loadImages = async () => {
+      try {
+        const imageList = getProfileImages();
+        const validImages = await preloadImages(imageList);
+        
+        setImages(validImages);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading images:', error);
+        setLoading(false);
+      }
+    };
 
+    loadImages();
+  }, []);
+
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (images.length <= 1) return;
+      
+      if (event.key === 'ArrowRight' || event.key === ' ') {
+        event.preventDefault();
+        setCurrentImage((prev) => (prev + 1) % images.length);
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+      } else if (event.key === 'a' || event.key === 'A') {
+        event.preventDefault();
+        setAutoRotate(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [images.length]);
+
+  // Auto-rotation effect
+  useEffect(() => {
+    if (!autoRotate || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [autoRotate, images.length]);
+
+  
   const handleClick = () => {
-    setCurrentImage((prev) => (prev + 1) % images.length);
+    if (images.length > 1) {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }
+  };
+
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (images.length > 1) {
+      setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+    }
   };
 
   return (
@@ -29,6 +88,7 @@ export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ className = '' }) 
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
         onClick={handleClick}
+        onContextMenu={handleRightClick}
       >
         {/* Glow effect */}
         <motion.div
@@ -63,21 +123,39 @@ export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ className = '' }) 
 
           {/* Image container */}
           <div className="absolute inset-3 rounded-full overflow-hidden bg-gradient-to-br from-violet/10 to-violet-2/10">
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={currentImage}
-                src={images[currentImage]}
-                alt="Profile"
-                className="w-full h-full object-cover"
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </AnimatePresence>
+            {loading ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <motion.div
+                  className="w-8 h-8 border-2 border-violet-2 border-t-transparent rounded-full"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                />
+              </div>
+            ) : images.length > 0 ? (
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentImage}
+                  src={images[currentImage]}
+                  alt={`Profile ${currentImage + 1}`}
+                  className="w-full h-full object-cover"
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  onError={(e) => {
+                    console.warn(`Failed to display image: ${images[currentImage]}`);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </AnimatePresence>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-violet-2">
+                <div className="text-center">
+                  <div className="text-2xl mb-2">📷</div>
+                  <div className="text-xs">No images</div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Hover overlay */}
@@ -138,17 +216,57 @@ export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ className = '' }) 
             }}
           />
 
+          {/* Image counter and auto-rotate indicator */}
+          {images.length > 1 && (
+            <motion.div
+              className="absolute top-1 left-1/2 transform -translate-x-1/2 text-xs text-violet-2 font-pixel bg-surface/95 px-2 py-1 rounded border border-violet-2/30 flex items-center gap-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHovered ? 1 : 0.7 }}
+              transition={{ duration: 0.2 }}
+            >
+              <span>{currentImage + 1}/{images.length}</span>
+              {autoRotate && (
+                <motion.div
+                  className="w-2 h-2 bg-lime rounded-full"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                />
+              )}
+            </motion.div>
+          )}
+
+          {/* Auto-rotate toggle */}
+          {images.length > 1 && (
+            <motion.button
+              className="absolute top-3 left-3 w-6 h-6 bg-surface/95 border border-violet-2/30 rounded text-xs text-violet-2 flex items-center justify-center hover:bg-violet-2/10 transition-colors"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHovered ? 1 : 0.3 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setAutoRotate(prev => !prev);
+              }}
+              title={autoRotate ? 'Stop auto-rotation (A)' : 'Start auto-rotation (A)'}
+            >
+              {autoRotate ? '⏸' : '▶'}
+            </motion.button>
+          )}
+
           {/* Click hint */}
           <AnimatePresence>
             {isHovered && images.length > 1 && (
               <motion.div
-                className="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xs text-violet-2 font-pixel bg-surface/95 px-2 py-1 rounded border border-violet-2/30"
+                className="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xs text-violet-2 font-pixel bg-surface/95 px-2 py-1 rounded border border-violet-2/30 text-center whitespace-nowrap"
                 initial={{ opacity: 0, y: 5, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 5, scale: 0.9 }}
                 transition={{ duration: 0.2 }}
               >
-                Click
+                <div className="flex gap-3 text-center">
+                  <div>
+                    <div>Click:</div>
+                  </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
